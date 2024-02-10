@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "980774170416",
+    "project_id": "grow-with-stickers",
+    "storage_bucket": "grow-with-stickers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980774170416:android:335c00b65966ff4ff6a2f5",
+        "android_client_info": {
+          "package_name": "com.example.grow_with_stickers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiguMAzyXdMvpNVC3S0ASy62GoTIO8QHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
