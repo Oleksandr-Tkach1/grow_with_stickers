@@ -1,5 +1,5 @@
 import 'package:smartstruct/smartstruct.dart';
-import '../models/book.dart';
+import '../models/books.dart';
 
 @mapper
 abstract class Mapper{

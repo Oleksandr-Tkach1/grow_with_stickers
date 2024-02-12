@@ -1,4 +1,4 @@
-const String tableCard = 'Card';
+const String tableCard = 'Book';
 
 class CardDetailsField{
   static final List<String> values = [
