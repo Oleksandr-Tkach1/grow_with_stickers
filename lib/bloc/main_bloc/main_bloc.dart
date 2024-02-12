@@ -4,13 +4,13 @@ import 'main_state.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   MainBloc() : super(const MainState(status: AuthenticationStatus.uninitialized)){
-    on<AppStarted>((event, emit) async{
+    on<Started>((event, emit) async{
       emit(state.copyWith(status: AuthenticationStatus.loading));
     });
-    on<AppLoaded>((event, emit) async{
-      emit(state.copyWith(status: AuthenticationStatus.authenticated));
+    on<Loaded>((event, emit) async{
+      emit(state.copyWith(status: AuthenticationStatus.uninitialized));
     });
-    on<LoggedIn>((event, emit) async{
+    on<Start>((event, emit) async{
       emit(state.copyWith(
         status: AuthenticationStatus.authenticated,
       ));

@@ -21,7 +21,7 @@ class _ProgressAnimationAppState extends State<ProgressAnimationApp> {
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
-            color: Color(0xFFE6E6E6),
+            color: Color(0xFF005674),
           ),
         );
       },

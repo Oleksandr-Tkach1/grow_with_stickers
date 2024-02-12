@@ -9,17 +9,19 @@ import 'bloc/main_bloc/main_bloc.dart';
 import 'bloc/main_bloc/main_state.dart';
 import 'data/SQLite/SQLite_service.dart';
 import 'data/SQLite/utils/model_mapper.dart';
+import 'network/services/firebase/firebase_database.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  final SqliteService sqliteService = SqliteService.instance;
-  sqliteService.database;
+  final SqliteService _sqliteService = SqliteService.instance;
+  _sqliteService.database;
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase();
   final ModelMapper modelMapper = ModelMapper();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
   runApp(
       MultiRepositoryProvider(
-          providers: getRepositories(sqliteService),
-          child: MultiBlocProvider(providers: getProviders(sqliteService, modelMapper), child: const MyApp())
+          providers: getRepositories(_sqliteService, _firebaseDatabase),
+          child: MultiBlocProvider(providers: getProviders(_sqliteService, modelMapper), child: const MyApp())
       )
   );
 }

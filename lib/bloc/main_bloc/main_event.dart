@@ -4,23 +4,23 @@ abstract class MainEvent extends Equatable {
   const MainEvent([List props = const []]);
 }
 
-class AppStarted extends MainEvent {
+class Started extends MainEvent {
   @override
   List<Object> get props => [];
   @override
-  String toString() => 'AppStarted';
+  String toString() => 'Started';
 }
 
-class AppLoaded extends MainEvent {
+class Loaded extends MainEvent {
   @override
   List<Object> get props => [];
   @override
-  String toString() => 'AppLoaded';
+  String toString() => 'Loaded';
 }
 
-class LoggedIn extends MainEvent {
+class Start extends MainEvent {
   @override
   List<Object> get props => [];
   @override
-  String toString() => 'LoggedIn';
+  String toString() => 'Start';
 }

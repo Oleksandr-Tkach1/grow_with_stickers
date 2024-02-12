@@ -9,8 +9,9 @@ class AppTextStyles {
     fontSize: Dimens.textSize,
   );
   static TextStyle titleTextStyle = const TextStyle(
+    fontFamily: 'Gilroy',
     color: AppColors.textColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     fontSize: Dimens.titleTextSize,
   );
   static TextStyle buttonItemTextStyle = const TextStyle(
