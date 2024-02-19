@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
+import 'package:grow_with_stickers/ui/screens/home/cubit/home_state.dart';
 import '../../game/game_screen.dart';
 
 class ListBooks extends StatelessWidget {
-  const ListBooks({Key? key}) : super(key: key);
+  final HomeState state;
+  const ListBooks({Key? key, required this.state}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 2, // Provide a fixed height or adjust as needed
+      height: MediaQuery.of(context).size.height / 2,
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
         separatorBuilder: (context, index) => SizedBox(width: 32),
@@ -23,16 +24,16 @@ class ListBooks extends StatelessWidget {
               verticalOffset: 50.0,
               child: FadeInAnimation(
                 child: GestureDetector(
-                  onTap: ()=> Navigator.of(context, rootNavigator: true).push(
+                  onTap: ()=> Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => GameScreen(),
+                      builder: (_) => GameScreen(book: state.listBooks[index],),
                     ),
                   ),
                   child: Container(
                     height: 85,
                     width: 125,
-                    child: Image.asset(
-                      'assets/images/book.png',
+                    child: Image.network(
+                      state.listBooks[index]!.coverUrl!,
                       fit: BoxFit.cover, // Adjust the image fit as needed
                     ),
                   ),
@@ -41,7 +42,7 @@ class ListBooks extends StatelessWidget {
             ),
           );
         },
-        itemCount: 18, // Adjust the itemCount as needed
+        itemCount: state.listBooks.length, // Adjust the itemCount as needed
       ),
     );
   }

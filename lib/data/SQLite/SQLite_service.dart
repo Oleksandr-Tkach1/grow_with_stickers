@@ -1,4 +1,6 @@
-import 'models/books.dart';
+import 'package:grow_with_stickers/data/SQLite/entity/book_entity.dart';
+import 'package:grow_with_stickers/data/SQLite/entity/page_entity.dart';
+import 'package:grow_with_stickers/data/SQLite/entity/sticker_entity.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -27,107 +29,116 @@ class SqliteService {
     const intType = 'INTEGER NOT NULL';
     const textType = 'TEXT NOT NULL';
     await db.execute('''
-    CREATE TABLE $tableCard ( 
-      ${CardDetailsField.id} $idType, 
-      ${CardDetailsField.isMyCard} $intType,
-      ${CardDetailsField.companyName} $textType
+    CREATE TABLE $tableBooks ( 
+      ${BookEntityField.titleRu} $textType, 
+      ${BookEntityField.coverUrl} $textType,
+      ${BookEntityField.productId} $textType,
+      ${BookEntityField.titleUa} $textType,
+      ${BookEntityField.free} $intType,
+      ${BookEntityField.category} $textType,
+      ${BookEntityField.title} $textType
     )
   ''');
+    await db.execute('''
+          CREATE TABLE $tablePages (
+            id $idType,
+            bookProductId TEXT,
+            ${PageEntityField.titleRu} $textType,
+            ${PageEntityField.taskRu} $textType,
+            ${PageEntityField.task} $textType,
+            ${PageEntityField.payload} $textType,
+            ${PageEntityField.backgroundUrl} $textType,
+            ${PageEntityField.titleUa} $textType,
+            ${PageEntityField.taskUa} $textType,
+            ${PageEntityField.title} $textType,
+            FOREIGN KEY(bookProductId) REFERENCES books(productId)
+          )
+        ''');
+    await db.execute('''
+          CREATE TABLE $tableStickers (
+            id $idType,
+            bookProductId TEXT,
+            ${StickerEntityField.coverUrl} $textType,
+            FOREIGN KEY(bookProductId) REFERENCES books(productId)
+          )
+        ''');
   }
 
-  Future<int> saveCard(CardDetails value) async {
-    final db = await instance.database;
-    final id = await db.insert(tableCard, value.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
-    return id;
-  }
+  // Future<void> saveBook(List<BookEntity> books) async {
+  //   final db = await database;
+  //   for (final book in books) {
+  //     final existingBooks = await db.query(
+  //       tableBooks,
+  //       where: '${BookEntityField.productId} = ?',
+  //       whereArgs: [book.productId],
+  //     );
+  //     if (existingBooks.isNotEmpty) {
+  //       await db.update(
+  //         tableBooks,
+  //         book.toMap(),
+  //         where: '${BookEntityField.productId} = ?',
+  //         whereArgs: [book.productId],
+  //       );
+  //     } else {
+  //       await db.insert(
+  //         tableBooks,
+  //         book.toMap(),
+  //         conflictAlgorithm: ConflictAlgorithm.replace,
+  //       );
+  //     }
+  //     if (book.page != null) {
+  //       for (final page in book.page!) {
+  //         await db.insert(
+  //           tablePages,
+  //           page.toMap(book.productId!),
+  //           conflictAlgorithm: ConflictAlgorithm.replace,
+  //         );
+  //       }
+  //     }
+  //     if (book.sticker != null) {
+  //       for (final sticker in book.sticker!) {
+  //         await db.insert(
+  //           tableStickers,
+  //           sticker.toMap(book.productId!),
+  //           conflictAlgorithm: ConflictAlgorithm.replace,
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
 
-  Future<int> saveMyCard(CardDetails value) async {
-    final db = await instance.database;
-    final existingCard = await db.query(
-      tableCard,
-      where: '${CardDetailsField.isMyCard} = ?',
-      whereArgs: [1],
-    );
-    if (existingCard.isNotEmpty && value.isMyCard == 1) {
-      final result = await db.update(
-        tableCard,
-        value.toMap(),
-        where: '${CardDetailsField.isMyCard} = ?',
-        whereArgs: [1],
-        conflictAlgorithm: ConflictAlgorithm.replace,
+  Future<List<BookEntity>> getBooks() async {
+    final db = await database;
+    final booksData = await db.query(tableBooks);
+    final books = <BookEntity>[];
+    for (final bookData in booksData) {
+      final pagesData = await db.query(
+        tablePages,
+        where: 'bookProductId = ?',
+        whereArgs: [bookData['productId']],
       );
-
-      return result;
-    } else {
-      final id = await db.insert(
-        tableCard,
-        value.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
+      final stickersData = await db.query(
+        tableStickers,
+        where: 'bookProductId = ?',
+        whereArgs: [bookData['productId']],
       );
-      return id;
+      final pages = pagesData.map((data) => PageEntity.fromMap(data)).toList();
+      final stickers =
+      stickersData.map((data) => StickerEntity.fromMap(data)).toList();
+      books.add(
+        BookEntity(
+          page: pages,
+          sticker: stickers,
+          titleRu: bookData['titleRu'] as String,
+          coverUrl: bookData['coverUrl'] as String,
+          productId: bookData['productId'] as String,
+          titleUa: bookData['titleUa'] as String,
+          free: bookData['free'] == 1,
+          category: bookData['category'] as String,
+          title: bookData['title'] as String,
+        ),
+      );
     }
-  }
-
-  Future<List<CardDetails>> getCards() async {
-    final db = await instance.database;
-    final List<Map<String, Object?>> queryResult = await db.query(tableCard, columns: CardDetailsField.values);
-    List<CardDetails> cardList = queryResult.map((json) => CardDetails.fromJson(json)).toList();
-    cardList.sort((a, b) {
-      if (a.isMyCard == 1 && b.isMyCard == 0) {
-        return -1;
-      } else if (a.isMyCard == 0 && b.isMyCard == 1) {
-        return 1;
-      } else {
-        return b.date!.compareTo(a.date!);
-      }
-    });
-    return cardList;
-  }
-
-
-  Future<CardDetails?> getMyCard() async {
-    final db = await instance.database;
-    final List<Map<String, Object?>> queryResult = await db.query(tableCard,
-      columns: CardDetailsField.values,
-      orderBy: 'date DESC',
-      where: '${CardDetailsField.isMyCard} = ?', whereArgs: [1]);
-    if (queryResult.isNotEmpty) {
-      return CardDetails.fromJson(queryResult.first);
-    } else {
-      return null;
-    }
-  }
-
-  Future<int> updateCardDetails(int id, String cardDetails) async {
-    final db = await instance.database;
-    final userData = {'cardDetails': cardDetails};
-    final result = await db.update(tableCard, userData, where: '${CardDetailsField.id} = ?', whereArgs: [id]);
-    return result;
-  }
-
-  Future<int> updateCardPathImage(int id, String imagePath) async {
-    final db = await instance.database;
-    final userData = {'cardImage': imagePath};
-    final result = await db.update(tableCard, userData, where: '${CardDetailsField.id} = ?', whereArgs: [id]);
-    return result;
-  }
-
-  Future<int> deleteCard(int id) async {
-    final db = await instance.database;
-    return await db.delete(
-      tableCard,
-      where: '${CardDetailsField.id} = ?',
-      whereArgs: [id],
-    );
-  }
-
-  Future<void> deleteTablesInDatabase() async {
-    await _database!.delete(tableCard);
-    return;
-  }
-
-  Future close() async {
-    final db = await instance.database;
-    db.close();
+    return books;
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../utils/ui/colors.dart';
 
 // ignore: constant_identifier_names
 enum AppButtonType { PLAT, STANDARD }
 
-class AppButton extends StatefulWidget {
+class AppButton extends StatelessWidget {
   final double? width;
   final double? height;
+  final double? paddingAll;
+  final BorderRadius? borderRadius;
   final String? pathImage;
   final VoidCallback? onPressed;
   final bool? enable;
@@ -17,6 +18,8 @@ class AppButton extends StatefulWidget {
     Key? key,
     this.width = double.infinity,
     this.height = 40,
+    this.paddingAll = 0,
+    this.borderRadius,
     this.onPressed,
     this.pathImage,
     this.enable = true,
@@ -27,29 +30,27 @@ class AppButton extends StatefulWidget {
         super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AppButtonState createState() => _AppButtonState();
-}
-
-class _AppButtonState extends State<AppButton> {
-  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
-          constraints: BoxConstraints(minWidth: widget.width ?? 60.0, minHeight: widget.height ?? 52.0),
+          padding: EdgeInsets.all(paddingAll!),
+          constraints: BoxConstraints(minWidth: width ?? 60.0, minHeight: height ?? 52.0),
           alignment: Alignment.center,
-          width: widget.width,
-          height: widget.height,
+          width: width,
+          height: height,
           child: Stack(
             alignment: Alignment.center,
             children: [
               Material(
+                borderRadius: borderRadius,
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap:widget.onPressed!,
+                  borderRadius: borderRadius,
+                  onTap: onPressed!,
                   child: Ink.image(
-                    image: AssetImage(widget.pathImage!),
+                    image: AssetImage(pathImage!),
+                    fit: BoxFit.fill,
                   ),
                 ),
               ),

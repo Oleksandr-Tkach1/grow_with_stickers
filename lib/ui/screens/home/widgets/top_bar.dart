@@ -27,9 +27,11 @@ class TopBar extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: AppButton(
-                height: 56,
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                paddingAll: 4,
+                height: 64,
                 width: MediaQuery.of(context).size.width / 13,
-                onPressed: ()=> onTap,
+                onPressed: ()=> onTap(),
                 pathImage: PathImages.settingsButton,
               ),
             ),

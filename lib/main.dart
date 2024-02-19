@@ -25,9 +25,9 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
   runApp(MultiRepositoryProvider(
-      providers: getRepositories(_sqliteService, _firebaseDatabase),
+      providers: getRepositories(_sqliteService, modelMapper, _firebaseDatabase),
       child: MultiBlocProvider(
-          providers: getProviders(_sqliteService, modelMapper),
+          providers: getProviders(_sqliteService, modelMapper, _firebaseDatabase),
           child: const MyApp())));
 }
 

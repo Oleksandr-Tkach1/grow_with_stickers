@@ -14,7 +14,7 @@ class StartScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          Center(child: Container(width: double.infinity, child: Image.asset(PathImages.backgroundStartScreen, fit: BoxFit.fill))),
+          Center(child: Container(width: double.infinity, child: Image.asset(PathImages.startScreenBackground, fit: BoxFit.fill))),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
