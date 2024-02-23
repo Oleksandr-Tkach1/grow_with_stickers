@@ -10,7 +10,7 @@ class ListBooks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 2,
+      height: MediaQuery.of(context).size.height / 1.8 -5,
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
         separatorBuilder: (context, index) => SizedBox(width: 32),
@@ -30,8 +30,8 @@ class ListBooks extends StatelessWidget {
                     ),
                   ),
                   child: Container(
-                    height: 85,
-                    width: 125,
+                    height: 95,
+                    width: 135,
                     child: Image.network(
                       state.listBooks[index]!.coverUrl!,
                       fit: BoxFit.cover, // Adjust the image fit as needed

@@ -9,6 +9,8 @@ import 'package:grow_with_stickers/ui/screens/home/widgets/top_bar.dart';
 import 'package:grow_with_stickers/ui/screens/settings/settings_screen.dart';
 import 'package:grow_with_stickers/utils/ui/path_images.dart';
 
+import '../../../utils/widgets/app_progress_animation.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -34,9 +36,7 @@ class HomeScreen extends StatelessWidget {
           }
             return BlocConsumer<HomeCubit, HomeState>(
               listener: (context, state){
-                // if(state.status == LoadingStatus.complete){
-                //   BlocProvider.of<MainBloc>(context).add(Loaded());
-                // }
+                ///TODO
               },
               builder: (context, state){
                 return Stack(
@@ -48,6 +48,7 @@ class HomeScreen extends StatelessWidget {
                         TopBar(onTap: ()=> Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => SettingsScreen(),
                         )),),
+                        state.status == LoadingStatus.loading ? Center(child: ProgressAnimationApp(indicator: Indicator.Wave, color: Colors.white,),) :
                         ListBooks(state: state),
                         Categories(),
                       ],

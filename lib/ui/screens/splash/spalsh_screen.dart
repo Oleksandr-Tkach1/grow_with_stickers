@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         ),
                       ),
                     ),
-                    ProgressAnimationApp(indicator: Indicator.Wave,)
+                    ProgressAnimationApp(indicator: Indicator.Wave, color: Color(0xFF005674),)
                   ],
                 ),
               ),

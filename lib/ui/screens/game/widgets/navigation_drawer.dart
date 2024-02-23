@@ -6,7 +6,8 @@ class NavigationDrawer extends StatelessWidget {
   final Function onTapBackPageButton;
   final Function onTapMenuButton;
   final Function onTapExitButton;
-  const NavigationDrawer({super.key, required this.onTapBackPageButton, required this.onTapMenuButton, required this.onTapExitButton});
+  final Function onTapInfoButton;
+  const NavigationDrawer({super.key, required this.onTapBackPageButton, required this.onTapMenuButton, required this.onTapExitButton, required this.onTapInfoButton});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,7 @@ class NavigationDrawer extends StatelessWidget {
                     paddingAll: 4,
                     height: 64,
                     width: MediaQuery.of(context).size.width / 13,
-                    onPressed: ()=> onTapExitButton,
+                    onPressed: ()=> onTapInfoButton(),
                     pathImage: PathImages.infoButton,
                   ),
                 ),
